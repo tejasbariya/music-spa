@@ -1,0 +1,50 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+:root {
+    /* Backgrounds */
+    --bg-main: #121212;
+    --bg-card: #1E1E1E;
+    --bg-input: #2A2A2A;
+
+    /* Text */
+    --text-primary: #FFFFFF;
+    --text-secondary: #B3B3B3;
+    --text-muted: #777777;
+
+    /* Accent / Brand */
+    --accent-primary: #1DB954;
+    --accent-hover: #1ED760;
+
+    /* Borders */
+    --border-default: #333333;
+    --border-focus: #1DB954;
+
+    /* Feedback */
+    --color-error: #E91429;
+    --color-success: #1DB954;
+
+    /* Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+
+    /* Spacing */
+    --space-xs: 5px;
+    --space-sm: 10px;
+    --space-md: 15px;
+    --space-lg: 30px;
+}
+
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    padding: 10%;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+}
+

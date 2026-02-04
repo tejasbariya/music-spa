@@ -1,4 +1,3 @@
-var app = angular.module('MusicApp', ['ngRoute']);
 app.controller("MusicController", function($scope, $location) {
     // Global data
     $scope.songs = [];

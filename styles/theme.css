@@ -43,7 +43,7 @@ body{
     align-items: center;
     justify-content: space-around;
     flex-direction: column;
-    padding: 10%;
+    padding: 10vh 10vw;
     background-color: var(--bg-main);
     color: var(--text-primary);
 }

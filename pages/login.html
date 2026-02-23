@@ -1,5 +1,5 @@
 
-<form id="login-form">
+<form id="login-form" ng-controller="loginController">
     <div class="login-text"> Login Form </div>
     <div>
         <div  class="labels">Email</div>
@@ -9,6 +9,7 @@
         <div  class="labels">Password</div>
         <input type="password" ng-model="password" >
     </div>
+    <div class="msg"><a href="#!/register">Register</a></div>
     <div class="msg" ng-bind="msg"></div>
-    <input type="submit" ng-click="setData()">
+    <input type="submit" ng-click="login()">
 </form>

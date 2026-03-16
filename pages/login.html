@@ -1,15 +1,24 @@
-
 <form id="login-form" ng-controller="loginController">
-    <div class="login-text"> Login Form </div>
-    <div>
-        <div  class="labels">Email</div>
-        <input type="text" ng-model="email" placeholder="bentennison69@gmail.com">
+    <div class="login-text" ng-if="step === 1">Login Form</div>
+    <div ng-if="step === 1">
+        <div class="labels">Email</div>
+        <input type="text" ng-model="$parent.email" placeholder="user@example.com">
     </div>
-    <div>
-        <div  class="labels">Password</div>
-        <input type="password" ng-model="password" >
+    <div ng-if="step === 1">
+        <div class="labels">Password</div>
+        <input type="password" ng-model="$parent.password">
     </div>
-    <div class="msg"><a href="#!/register">Register</a></div>
+
+    <div class="login-text" ng-if="step === 2">Verify OTP</div>
+    <div ng-if="step === 2">
+        <div class="labels">Enter OTP</div>
+        <input type="text" ng-model="$parent.otp" placeholder="6-digit code">
+    </div>
+
+    <div class="msg" ng-if="step === 1"><a href="#!/register">Register</a></div>
+    <div class="msg" ng-if="step === 2"><a href="" ng-click="$parent.step = 1; $parent.msg = ''">Go Back</a></div>
     <div class="msg" ng-bind="msg"></div>
-    <input type="submit" ng-click="login()">
+
+    <input type="button" value="Send OTP" ng-click="login()" ng-show="step === 1">
+    <input type="button" value="Verify & Login" ng-click="verifyOtp()" ng-show="step === 2">
 </form>

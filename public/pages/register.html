@@ -1,0 +1,35 @@
+<div class="register-container flex justify-center align-center" style="min-height: 80vh;">
+    <div class="glass-panel" style="width: 100%; max-width: 450px; padding: 2.5rem; animation: scaleIn 0.5s forwards;">
+        
+        <form id="login-form" ng-submit="register()">
+            <div class="text-center mb-4 w-full">
+                <span class="material-symbols-outlined" style="font-size: 3rem; color: var(--accent-color);">person_add</span>
+                <div class="login-text">Create Account</div>
+                <p>Join MusicSPA today</p>
+            </div>
+
+            <div>
+                <input type="text" ng-model="username" placeholder="Username" required>
+            </div>
+            <div>
+                <input type="email" ng-model="email" placeholder="Email Address" required>
+            </div>
+            <div>
+                <input type="password" ng-model="password" placeholder="Password" required minlength="6">
+            </div>
+            
+            <div ng-if="msg" class="msg mb-4">
+                {{ msg }}
+            </div>
+
+            <button type="submit" class="btn w-full" ng-disabled="loading">
+                <span ng-if="!loading">Register</span>
+                <span ng-if="loading">Creating account...</span>
+            </button>
+            
+            <div class="auth-switch text-center w-full">
+                Already have an account? <a href="#!/login">Login here</a>
+            </div>
+        </form>
+    </div>
+</div>

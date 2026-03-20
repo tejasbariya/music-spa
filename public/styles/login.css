@@ -1,0 +1,98 @@
+/* Modern Login Form CSS */
+#login-form {
+    width: 100%;
+    max-width: 450px;
+    margin: 2rem auto;
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+#login-form .login-text {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+#login-form .login-text::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-color), var(--secondary-accent));
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+}
+
+#login-form .msg {
+    color: #fca5a5; /* Soft red for errors */
+    font-size: 0.95rem;
+    text-align: center;
+    background: rgba(239, 68, 68, 0.1);
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    width: 100%;
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/* Ensure inputs in the login form take full width */
+#login-form input[type="text"],
+#login-form input[type="email"],
+#login-form input[type="password"] {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+/* The form submit button */
+#login-form button {
+    width: 100%;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    padding: 14px 24px;
+}
+
+/* Container for each input to allow proper spacing */
+#login-form > div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Switch to register/login link */
+.auth-switch {
+    margin-top: 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.auth-switch a {
+    color: var(--accent-hover);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.auth-switch a:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+}

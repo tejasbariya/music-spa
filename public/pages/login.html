@@ -1,0 +1,32 @@
+<div class="login-container flex justify-center align-center" style="min-height: 80vh;">
+    <div class="glass-panel" style="width: 100%; max-width: 450px; padding: 2.5rem; animation: scaleIn 0.5s forwards;">
+        
+        <form id="login-form" ng-submit="login()">
+            <div class="text-center mb-4 w-full">
+                <span class="material-symbols-outlined" style="font-size: 3rem; color: var(--accent-color);">music_note</span>
+                <div class="login-text">Welcome Back</div>
+                <p>Login to your MusicSPA account</p>
+            </div>
+
+            <div>
+                <input type="email" ng-model="email" placeholder="Email Address" required>
+            </div>
+            <div>
+                <input type="password" ng-model="password" placeholder="Password" required>
+            </div>
+            
+            <div ng-if="msg" class="msg mb-4">
+                {{ msg }}
+            </div>
+
+            <button type="submit" class="btn w-full" ng-disabled="loading">
+                <span ng-if="!loading">Login</span>
+                <span ng-if="loading">Signing in...</span>
+            </button>
+            
+            <div class="auth-switch text-center w-full">
+                Don't have an account? <a href="#!/register">Register here</a>
+            </div>
+        </form>
+    </div>
+</div>

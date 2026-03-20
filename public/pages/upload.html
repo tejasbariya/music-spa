@@ -1,0 +1,42 @@
+<div class="upload-container flex justify-center align-center" style="min-height: 70vh;">
+    <div class="glass-panel" style="width: 100%; max-width: 500px; padding: 3rem;">
+        <div class="text-center mb-4">
+            <span class="material-symbols-outlined" style="font-size: 3rem; color: var(--accent-color);">cloud_upload</span>
+            <h2 class="mt-4">Upload New Song</h2>
+            <p>Add to your local collection</p>
+        </div>
+
+        <form>
+            <div class="input-group">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Song Title (Optional)</label>
+                <input type="text" ng-model="uploadData.name" placeholder="Leave blank to use filename">
+            </div>
+
+            <div class="input-group" style="margin-top: 1.5rem;">
+                <!-- Hide default input and style label as button -->
+                <input type="file" id="songFile" file-model="uploadData.file" accept="audio/mpeg, audio/mp3" style="display: none;" onchange="angular.element(this).scope().fileNameChanged(this)">
+                
+                <label for="songFile" class="btn btn-secondary" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; cursor: pointer; border-style: dashed; padding: 2rem 1rem;">
+                    <span class="material-symbols-outlined">audio_file</span>
+                    Choose MP3 File
+                </label>
+                <div ng-if="selectedFileName" style="margin-top: 0.5rem; text-align: center; color: var(--accent-color);">
+                    Selected: {{ selectedFileName }}
+                </div>
+            </div>
+
+            <div ng-if="uploadError" class="alert text-center" style="margin-top: 1rem; color: var(--danger);">
+                {{ uploadError }}
+            </div>
+            <div ng-if="uploadSuccess" class="alert text-center" style="margin-top: 1rem; color: #10b981;">
+                {{ uploadSuccess }}
+            </div>
+
+            <button type="button" class="btn" style="width: 100%; margin-top: 2rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem;" ng-click="uploadSong()" ng-disabled="isUploading || !selectedFileName">
+                <span class="material-symbols-outlined">upload</span>
+                <span ng-if="!isUploading">Upload Song</span>
+                <span ng-if="isUploading">Uploading...</span>
+            </button>
+        </form>
+    </div>
+</div>

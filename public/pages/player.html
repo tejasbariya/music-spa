@@ -1,0 +1,65 @@
+<div class="player-wrapper flex justify-center align-center" style="min-height: 80vh;" ng-init="loadLibrary()">
+    <div class="glass-panel player" style="width: 100%; max-width: 600px; padding: 2.5rem; animation: fadeUp 0.6s forwards;">
+        
+        <!-- Artwork -->
+        <div class="song-img">
+            <div class="img" ng-class="{'spin' : isPlaying}" style="position: relative; overflow: hidden;">
+                <img ng-if="currentSong.img" ng-src="{{ currentSong.img }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <span ng-if="!currentSong.img" class="material-symbols-outlined">music_note</span>
+                <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);"></div>
+            </div>
+        </div>
+
+        <!-- Song Info -->
+        <div class="song-info">
+            <div class="song-name">{{ currentSong.name || 'No song selected' }}</div>
+            <div class="song-artist">{{ currentSong.artistName || 'Local Library' }}</div>
+        </div>
+
+        <!-- Global Audio Element (Hidden) -->
+        <audio id="audio" ng-src="{{ currentSong.src }}"></audio>
+
+        <!-- Progress Bar (Visual Only for now) -->
+        <div class="song-progress-container">
+            <div class="song-progress-bar">
+                <div class="progress-bg">
+                    <!-- Progress fill controlled by ng-style -->
+                    <div class="progress-fill" ng-style="{ width: progressPercent || '0%' }"></div>
+                </div>
+            </div>
+            <!-- Dummy Time info placeholders until fully implemented in js -->
+            <div class="time-info">
+                <span>0:00</span>
+                <span>--:--</span>
+            </div>
+        </div>
+
+        <!-- Controls Area -->
+        <div class="song-controls">
+            <button ng-click="prev()">
+                <span class="material-symbols-outlined">skip_previous</span>
+            </button>
+            
+            <button class="play-pause-btn" ng-click="playPause()">
+                <span class="material-symbols-outlined">
+                    {{ isPlaying ? 'pause_circle' : 'play_arrow' }}
+                </span>
+            </button>
+            
+            <button ng-click="next()">
+                <span class="material-symbols-outlined">skip_next</span>
+            </button>
+        </div>
+            
+        <!-- Library Status -->
+        <div class="text-center mt-4 w-full" style="font-size: 0.9rem; color: var(--text-secondary);">
+            <span ng-if="songs.length > 0">Playing {{ currentSongIndex + 1 }} of {{ songs.length }}</span>
+            <span ng-if="songs.length === 0">Library is empty</span>
+        </div>
+    </div>
+</div>
+
+<style>
+.spin { animation: spin 20s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+</style>

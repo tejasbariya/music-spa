@@ -1,0 +1,52 @@
+<div class="home-container" style="padding: 2rem; display: flex; flex-direction: column; gap: 2rem;">
+    <!-- Welcome Header -->
+    <div class="glass-panel" style="padding: 3rem; text-align: center;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Welcome to MusicSPA</h1>
+        <p style="font-size: 1.1rem; color: var(--text-secondary);">Your personal music library, everywhere you go.</p>
+        
+        <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem;">
+            <a href="#!/player" class="btn"><span class="material-symbols-outlined" style="vertical-align: middle;">play_circle</span> Go to Player</a>
+            <a href="#!/upload" class="btn btn-secondary"><span class="material-symbols-outlined" style="vertical-align: middle;">upload</span> Upload Song</a>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="glass-panel" style="padding: 2rem;">
+        <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+            <span class="material-symbols-outlined">search</span> Discover New Music
+        </h2>
+        <form ng-submit="searchSongs()" style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <input type="text" ng-model="searchQuery" placeholder="Search for artists, songs, or albums..." style="flex: 1; margin: 0; padding: 15px; font-size: 1.1rem;">
+            <button type="submit" class="btn" style="padding: 0 2rem; display: flex; align-items: center; gap: 0.5rem;" ng-disabled="isSearching">
+                <span ng-if="!isSearching" class="material-symbols-outlined">search</span>
+                <span ng-if="!isSearching">Search</span>
+                <span ng-if="isSearching">Searching...</span>
+            </button>
+        </form>
+
+        <!-- Search Results Grid -->
+        <div ng-if="searchResults && searchResults.length > 0" style="margin-top: 2rem;">
+            <h3>Results for "{{ lastSearch }}"</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                
+                <div class="glass-panel search-card" ng-repeat="track in searchResults" style="padding: 1rem; transition: transform 0.2s;">
+                    <img ng-src="{{ track.artworkUrl100 }}" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+                    <h4 style="margin: 0; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.trackName }}</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.25rem;">{{ track.artistName }}</p>
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem;" ng-click="playPreview(track)">
+                        <span class="material-symbols-outlined">play_arrow</span> Preview
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        
+        <div ng-if="searchError" class="alert msg-box text-center mt-4" style="color: var(--danger)">
+            {{ searchError }}
+        </div>
+    </div>
+</div>
+
+<style>
+.search-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+</style>

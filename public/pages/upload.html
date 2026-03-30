@@ -1,42 +1,60 @@
-<div class="upload-container flex justify-center align-center" style="min-height: 70vh;">
-    <div class="glass-panel" style="width: 100%; max-width: 500px; padding: 3rem;">
-        <div class="text-center mb-4">
-            <span class="material-symbols-outlined" style="font-size: 3rem; color: var(--accent-color);">cloud_upload</span>
-            <h2 class="mt-4">Upload New Song</h2>
-            <p>Add to your local collection</p>
+<div class="upload-container">
+    <div class="glass-panel">
+
+        <div style="text-align:center;margin-bottom:2.5rem;">
+            <div style="width:58px;height:58px;background:linear-gradient(145deg,var(--gold-ember),var(--gold),var(--gold-light));border-radius:var(--r-xs);display:inline-flex;align-items:center;justify-content:center;margin-bottom:1.5rem;box-shadow:0 8px 30px var(--gold-glow),inset 0 1px 0 rgba(255,255,255,0.2);">
+                <span class="material-symbols-outlined" style="font-size:1.5rem;color:var(--void);font-variation-settings:'FILL' 1;">cloud_upload</span>
+            </div>
+            <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-style:italic;font-weight:600;margin-bottom:0.4rem;background:linear-gradient(135deg,var(--text-100),var(--text-200));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Upload a Song</h2>
+            <p style="font-size:0.85rem;font-weight:300;letter-spacing:0.02em;color:var(--text-300);">Add an MP3 to your personal library</p>
         </div>
 
         <form>
-            <div class="input-group">
-                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Song Title (Optional)</label>
+            <div style="margin-bottom:1.25rem;">
+                <label style="display:block;font-size:0.68rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-400);margin-bottom:0.5rem;">
+                    Song Title &nbsp;<span style="font-weight:300;letter-spacing:0;text-transform:none;opacity:0.55;">— optional</span>
+                </label>
                 <input type="text" ng-model="uploadData.name" placeholder="Leave blank to use filename">
             </div>
 
-            <div class="input-group" style="margin-top: 1.5rem;">
-                <!-- Hide default input and style label as button -->
-                <input type="file" id="songFile" file-model="uploadData.file" accept="audio/mpeg, audio/mp3" style="display: none;" onchange="angular.element(this).scope().fileNameChanged(this)">
-                
-                <label for="songFile" class="btn btn-secondary" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; cursor: pointer; border-style: dashed; padding: 2rem 1rem;">
-                    <span class="material-symbols-outlined">audio_file</span>
-                    Choose MP3 File
-                </label>
-                <div ng-if="selectedFileName" style="margin-top: 0.5rem; text-align: center; color: var(--accent-color);">
-                    Selected: {{ selectedFileName }}
-                </div>
+            <input type="file" id="songFile" file-model="uploadData.file" accept="audio/mpeg,audio/mp3"
+                   style="display:none;" onchange="angular.element(this).scope().fileNameChanged(this)">
+
+            <label for="songFile" class="btn btn-secondary" style="width:100%;margin-bottom:0;">
+                <span class="material-symbols-outlined" style="font-size:1.15rem;">audio_file</span>
+                Choose MP3 file
+            </label>
+
+            <div ng-if="selectedFileName"
+                 style="margin-top:0.85rem;text-align:center;font-size:0.83rem;color:var(--gold-light);background:var(--gold-smoke);padding:0.65rem 1rem;border-radius:var(--r-xs);border:1px solid rgba(201,149,42,0.18);display:flex;align-items:center;justify-content:center;gap:0.4rem;">
+                <span class="material-symbols-outlined" style="font-size:1rem;font-variation-settings:'FILL' 1;">check_circle</span>
+                {{ selectedFileName }}
             </div>
 
-            <div ng-if="uploadError" class="alert text-center" style="margin-top: 1rem; color: var(--danger);">
+            <div ng-if="uploadError"
+                 style="margin-top:1rem;color:#d98080;font-size:0.87rem;text-align:center;background:rgba(194,75,75,0.07);padding:0.75rem;border-radius:var(--r-xs);border:1px solid rgba(194,75,75,0.14);">
                 {{ uploadError }}
             </div>
-            <div ng-if="uploadSuccess" class="alert text-center" style="margin-top: 1rem; color: #10b981;">
+            <div ng-if="uploadSuccess"
+                 style="margin-top:1rem;color:var(--success);font-size:0.87rem;text-align:center;background:rgba(122,170,101,0.07);padding:0.75rem;border-radius:var(--r-xs);border:1px solid rgba(122,170,101,0.14);">
                 {{ uploadSuccess }}
             </div>
 
-            <button type="button" class="btn" style="width: 100%; margin-top: 2rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem;" ng-click="uploadSong()" ng-disabled="isUploading || !selectedFileName">
-                <span class="material-symbols-outlined">upload</span>
+            <button type="button" class="btn"
+                    style="width:100%;margin-top:2rem;padding:14px;font-size:0.82rem;"
+                    ng-click="uploadSong()"
+                    ng-disabled="isUploading || !selectedFileName">
+                <span class="material-symbols-outlined" style="font-size:1rem;">upload</span>
                 <span ng-if="!isUploading">Upload Song</span>
-                <span ng-if="isUploading">Uploading...</span>
+                <span ng-if="isUploading">Uploading…</span>
             </button>
         </form>
+
+        <!-- Bottom ornament -->
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-top:2rem;opacity:0.2;">
+            <div style="height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--gold));"></div>
+            <div style="width:3px;height:3px;background:var(--gold);border-radius:50%;"></div>
+            <div style="height:1px;flex:1;background:linear-gradient(270deg,transparent,var(--gold));"></div>
+        </div>
     </div>
 </div>

@@ -1,65 +1,90 @@
-<div class="player-wrapper flex justify-center align-center" style="min-height: 80vh;" ng-init="loadLibrary()">
-    <div class="glass-panel player" style="width: 100%; max-width: 600px; padding: 2.5rem; animation: fadeUp 0.6s forwards;">
-        
-        <!-- Artwork -->
-        <div class="song-img">
-            <div class="img" ng-class="{'spin' : isPlaying}" style="position: relative; overflow: hidden;">
-                <img ng-if="currentSong.img" ng-src="{{ currentSong.img }}" style="width: 100%; height: 100%; object-fit: cover;">
-                <span ng-if="!currentSong.img" class="material-symbols-outlined">music_note</span>
-                <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);"></div>
-            </div>
-        </div>
+<div class="player-wrapper" ng-init="loadLibrary()" ng-class="{'is-playing': isPlaying}">
+    <div class="glass-panel player" ng-class="{'is-playing': isPlaying}">
 
-        <!-- Song Info -->
-        <div class="song-info">
-            <div class="song-name">{{ currentSong.name || 'No song selected' }}</div>
-            <div class="song-artist">{{ currentSong.artistName || 'Local Library' }}</div>
-        </div>
+        <!-- ── ART ZONE ── -->
+        <div class="player-art-zone">
 
-        <!-- Global Audio Element (Hidden) -->
-        <audio id="audio" ng-src="{{ currentSong.src }}"></audio>
+            <!-- Blurred background pulled from album art via JS -->
+            <div class="player-art-blur" id="artBlur"></div>
 
-        <!-- Progress Bar (Visual Only for now) -->
-        <div class="song-progress-container">
-            <div class="song-progress-bar">
-                <div class="progress-bg">
-                    <!-- Progress fill controlled by ng-style -->
-                    <div class="progress-fill" ng-style="{ width: progressPercent || '0%' }"></div>
+            <!-- Album circle -->
+            <div class="player-art-circle">
+                <div class="art-img-wrap">
+                    <img ng-if="currentSong.img && currentSong.img !== 'imgs/default.png'"
+                         ng-src="{{ currentSong.img }}"
+                         id="artImg">
+                    <span ng-if="!currentSong.img || currentSong.img === 'imgs/default.png'"
+                          class="material-symbols-outlined">album</span>
                 </div>
             </div>
-            <!-- Dummy Time info placeholders until fully implemented in js -->
-            <div class="time-info">
-                <span>0:00</span>
-                <span>--:--</span>
+
+            <!-- Song info overlaid bottom of art zone -->
+            <div class="player-art-info">
+                <div class="player-song-name">{{ currentSong.name || 'Nothing playing' }}</div>
+                <div class="player-song-artist">{{ currentSong.artistName || 'Local Library' }}</div>
             </div>
         </div>
 
-        <!-- Controls Area -->
-        <div class="song-controls">
-            <button ng-click="prev()">
-                <span class="material-symbols-outlined">skip_previous</span>
-            </button>
-            
-            <button class="play-pause-btn" ng-click="playPause()">
-                <span class="material-symbols-outlined">
-                    {{ isPlaying ? 'pause_circle' : 'play_arrow' }}
+        <!-- ── CONTROLS ZONE ── -->
+        <div class="player-controls-zone">
+
+            <!-- Progress bar -->
+            <div class="progress-section">
+                <div class="progress-track" ng-click="seek($event)">
+                    <div class="progress-buffered" ng-style="{ width: progressBuffered || '0%' }"></div>
+                    <div class="progress-played"   ng-style="{ width: progressPercent  || '0%' }">
+                        <div class="progress-thumb"></div>
+                    </div>
+                </div>
+                <div class="progress-times">
+                    <span>{{ currentTime || '0:00' }}</span>
+                    <span>{{ duration    || '--:--' }}</span>
+                </div>
+            </div>
+
+            <!-- Playback controls -->
+            <div class="song-controls">
+                <button class="ctrl-btn" ng-click="prev()" title="Previous">
+                    <span class="material-symbols-outlined">skip_previous</span>
+                </button>
+                <button class="ctrl-btn play-pause-btn" ng-click="playPause()">
+                    <span class="material-symbols-outlined">{{ isPlaying ? 'pause' : 'play_arrow' }}</span>
+                </button>
+                <button class="ctrl-btn" ng-click="next()" title="Next">
+                    <span class="material-symbols-outlined">skip_next</span>
+                </button>
+            </div>
+
+            <!-- Track count -->
+            <div class="song-count">
+                <span ng-if="songs.length > 0">
+                    {{ currentSongIndex + 1 }}&thinsp;/&thinsp;{{ songs.length }}&ensp;tracks
                 </span>
-            </button>
-            
-            <button ng-click="next()">
-                <span class="material-symbols-outlined">skip_next</span>
-            </button>
+                <span ng-if="songs.length === 0">
+                    Library empty —&nbsp;<a href="#!/upload">upload a song</a>
+                </span>
+            </div>
+
         </div>
-            
-        <!-- Library Status -->
-        <div class="text-center mt-4 w-full" style="font-size: 0.9rem; color: var(--text-secondary);">
-            <span ng-if="songs.length > 0">Playing {{ currentSongIndex + 1 }} of {{ songs.length }}</span>
-            <span ng-if="songs.length === 0">Library is empty</span>
-        </div>
+
+        <!-- Hidden audio -->
+        <audio id="audio" ng-src="{{ currentSong.src }}"></audio>
+
     </div>
 </div>
 
-<style>
-.spin { animation: spin 20s linear infinite; }
-@keyframes spin { 100% { transform: rotate(360deg); } }
-</style>
+<script>
+// Update blurred background when art changes
+(function() {
+    var scope = angular.element(document.querySelector('[ng-controller]')).scope();
+    // Watch via MutationObserver on the img element
+    var observer = new MutationObserver(function() {
+        var img = document.getElementById('artImg');
+        var blur = document.getElementById('artBlur');
+        if (img && blur) {
+            blur.style.backgroundImage = 'url(' + img.src + ')';
+        }
+    });
+    observer.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['src', 'ng-src'] });
+})();
+</script>

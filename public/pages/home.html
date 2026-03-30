@@ -1,52 +1,92 @@
-<div class="home-container" style="padding: 2rem; display: flex; flex-direction: column; gap: 2rem;">
-    <!-- Welcome Header -->
-    <div class="glass-panel" style="padding: 3rem; text-align: center;">
-        <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Welcome to MusicSPA</h1>
-        <p style="font-size: 1.1rem; color: var(--text-secondary);">Your personal music library, everywhere you go.</p>
-        
-        <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem;">
-            <a href="#!/player" class="btn"><span class="material-symbols-outlined" style="vertical-align: middle;">play_circle</span> Go to Player</a>
-            <a href="#!/upload" class="btn btn-secondary"><span class="material-symbols-outlined" style="vertical-align: middle;">upload</span> Upload Song</a>
+<div class="home-container" style="padding: 1.25rem 0.25rem;">
+
+    <!-- Hero -->
+    <div class="glass-panel" style="padding: 4.5rem 3rem; text-align: center; position: relative; overflow: hidden;">
+
+        <!-- Grain texture overlay -->
+        <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.75%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22 opacity=%220.025%22/%3E%3C/svg%3E');opacity:0.6;pointer-events:none;"></div>
+
+        <!-- Warm radial glow -->
+        <div style="position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(201,149,42,0.12) 0%,transparent 70%);pointer-events:none;"></div>
+
+        <!-- Ornament top -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:2.5rem;">
+            <div style="height:1px;width:60px;background:linear-gradient(90deg,transparent,rgba(201,149,42,0.4));"></div>
+            <span style="font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-400);font-family:'Outfit',sans-serif;font-weight:300;">Est. Your Library</span>
+            <div style="height:1px;width:60px;background:linear-gradient(270deg,transparent,rgba(201,149,42,0.4));"></div>
+        </div>
+
+        <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.6rem,6vw,4.5rem);font-weight:600;font-style:italic;letter-spacing:-0.01em;margin-bottom:1rem;line-height:1.05;background:linear-gradient(135deg,var(--text-100) 0%,var(--gold-pale) 40%,var(--text-200) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+            Music,<br>the way you want it.
+        </h1>
+
+        <p style="max-width:380px;margin:0 auto 3rem;font-size:1rem;line-height:1.85;color:var(--text-300);font-weight:300;">
+            Stream, upload, and discover tracks from your personal library — beautifully.
+        </p>
+
+        <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
+            <a href="#!/player" class="btn">
+                <span class="material-symbols-outlined" style="font-size:1rem;font-variation-settings:'FILL' 1;">play_circle</span>
+                Open Player
+            </a>
+            <a href="#!/upload" class="btn btn-secondary">
+                <span class="material-symbols-outlined" style="font-size:1rem;">upload</span>
+                Upload Song
+            </a>
+        </div>
+
+        <!-- Ornament bottom -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-top:3rem;opacity:0.3;">
+            <div style="height:1px;width:100px;background:linear-gradient(90deg,transparent,var(--gold));"></div>
+            <div style="width:4px;height:4px;background:var(--gold);border-radius:50%;box-shadow:0 0 6px var(--gold);"></div>
+            <div style="width:3px;height:3px;background:var(--gold-deep);border-radius:50%;"></div>
+            <div style="width:4px;height:4px;background:var(--gold);border-radius:50%;box-shadow:0 0 6px var(--gold);"></div>
+            <div style="height:1px;width:100px;background:linear-gradient(270deg,transparent,var(--gold));"></div>
         </div>
     </div>
 
-    <!-- Search Section -->
-    <div class="glass-panel" style="padding: 2rem;">
-        <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-            <span class="material-symbols-outlined">search</span> Discover New Music
-        </h2>
-        <form ng-submit="searchSongs()" style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-            <input type="text" ng-model="searchQuery" placeholder="Search for artists, songs, or albums..." style="flex: 1; margin: 0; padding: 15px; font-size: 1.1rem;">
-            <button type="submit" class="btn" style="padding: 0 2rem; display: flex; align-items: center; gap: 0.5rem;" ng-disabled="isSearching">
-                <span ng-if="!isSearching" class="material-symbols-outlined">search</span>
-                <span ng-if="!isSearching">Search</span>
-                <span ng-if="isSearching">Searching...</span>
+    <!-- Search -->
+    <div class="glass-panel" style="padding: 2.5rem 2.75rem;">
+
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.75rem;">
+            <span class="material-symbols-outlined" style="font-size:1rem;color:var(--gold);opacity:0.8;">search</span>
+            <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;font-style:italic;margin:0;">Discover Music</h2>
+        </div>
+
+        <form ng-submit="searchSongs()" style="display:flex;gap:0.75rem;">
+            <input type="text" ng-model="searchQuery" placeholder="Artists, songs, albums…"
+                   style="flex:1;margin:0;font-size:0.92rem;">
+            <button type="submit" class="btn" style="flex-shrink:0;padding:0 1.75rem;" ng-disabled="isSearching">
+                <span ng-if="!isSearching" class="material-symbols-outlined" style="font-size:0.95rem;">arrow_forward</span>
+                <span ng-if="isSearching">…</span>
             </button>
         </form>
 
-        <!-- Search Results Grid -->
-        <div ng-if="searchResults && searchResults.length > 0" style="margin-top: 2rem;">
-            <h3>Results for "{{ lastSearch }}"</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
-                
-                <div class="glass-panel search-card" ng-repeat="track in searchResults" style="padding: 1rem; transition: transform 0.2s;">
-                    <img ng-src="{{ track.artworkUrl100 }}" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
-                    <h4 style="margin: 0; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.trackName }}</h4>
-                    <p style="font-size: 0.9rem; margin-top: 0.25rem;">{{ track.artistName }}</p>
-                    <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem;" ng-click="playPreview(track)">
-                        <span class="material-symbols-outlined">play_arrow</span> Preview
+        <!-- Results -->
+        <div ng-if="searchResults && searchResults.length > 0" style="margin-top:2.5rem;">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
+                <div style="height:1px;flex:1;background:linear-gradient(90deg,var(--gold-line),transparent);"></div>
+                <span style="font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-400);font-weight:300;white-space:nowrap;">Results for "{{ lastSearch }}"</span>
+                <div style="height:1px;flex:1;background:linear-gradient(270deg,var(--gold-line),transparent);"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:1rem;">
+                <div class="glass-panel search-card" ng-repeat="track in searchResults" style="padding:1.1rem;">
+                    <img ng-src="{{ track.artworkUrl100 }}"
+                         style="width:100%;border-radius:4px;margin-bottom:1rem;aspect-ratio:1;object-fit:cover;">
+                    <h4 style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;font-style:italic;margin:0 0 0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ track.trackName }}</h4>
+                    <p style="font-size:0.75rem;margin:0 0 1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0.04em;font-weight:300;">{{ track.artistName }}</p>
+                    <button class="btn btn-secondary"
+                            style="width:100%;font-size:0.72rem;padding:8px 12px;letter-spacing:0.08em;"
+                            ng-click="playPreview(track)">
+                        <span class="material-symbols-outlined" style="font-size:0.9rem;font-variation-settings:'FILL' 1;">play_arrow</span>
+                        Preview
                     </button>
                 </div>
-
             </div>
         </div>
-        
-        <div ng-if="searchError" class="alert msg-box text-center mt-4" style="color: var(--danger)">
+
+        <div ng-if="searchError" style="margin-top:1.25rem;color:#d98080;font-size:0.875rem;text-align:center;font-weight:300;">
             {{ searchError }}
         </div>
     </div>
 </div>
-
-<style>
-.search-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-</style>

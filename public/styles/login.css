@@ -1,98 +1,188 @@
-/* Modern Login Form CSS */
-#login-form {
-    width: 100%;
-    max-width: 450px;
-    margin: 2rem auto;
-    padding: 3rem 2.5rem;
+/* ════════════════════════════════════════
+   AUTH PAGES — CANDLELIGHT EDITION
+   ════════════════════════════════════════ */
+
+.login-container,
+.register-container {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1.5rem;
-    animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    min-height: 86vh;
+    padding: 2rem 1rem;
 }
 
-@keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.95) translateY(10px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-#login-form .login-text {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.02em;
-}
-
-#login-form .login-text::after {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 4px;
-    background: linear-gradient(90deg, var(--accent-color), var(--secondary-accent));
-    margin: 0.5rem auto 0;
-    border-radius: 2px;
-}
-
-#login-form .msg {
-    color: #fca5a5; /* Soft red for errors */
-    font-size: 0.95rem;
-    text-align: center;
-    background: rgba(239, 68, 68, 0.1);
-    padding: 0.75rem;
-    border-radius: 8px;
-    border: 1px solid rgba(239, 68, 68, 0.2);
+.login-container .glass-panel,
+.register-container .glass-panel {
     width: 100%;
+    max-width: 400px;
+    padding: 0;
+    border-radius: var(--r-xl) !important;
+    overflow: hidden;
+    animation: authRise 0.6s var(--silk) forwards;
+}
+
+@keyframes authRise {
+    from { opacity: 0; transform: scale(0.96) translateY(18px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Banner ── */
+.auth-banner {
+    padding: 3rem 2.5rem 2.25rem;
+    background:
+        radial-gradient(ellipse 100% 100% at 50% -10%, rgba(201,149,42,0.10) 0%, transparent 65%),
+        linear-gradient(175deg, rgba(34,27,16,0.8) 0%, rgba(17,13,8,0.95) 100%);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Faint horizontal ornament lines */
+.auth-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+        repeating-linear-gradient(
+            180deg,
+            transparent 0px,
+            transparent 39px,
+            rgba(201,149,42,0.03) 39px,
+            rgba(201,149,42,0.03) 40px
+        );
+    pointer-events: none;
+}
+
+.auth-banner::after {
+    /* override glass-panel::after */
+    content: '';
+    position: absolute;
+    top: 0; left: 8%; right: 8%;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(248,223,160,0.3) 40%,
+        rgba(248,223,160,0.3) 60%,
+        transparent);
+}
+
+.auth-banner .auth-icon {
+    width: 60px; height: 60px;
+    background: linear-gradient(145deg, var(--gold-ember), var(--gold), var(--gold-light));
+    border-radius: var(--r-xs);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    box-shadow:
+        0 8px 32px var(--gold-glow),
+        0 0 0 1px rgba(255,255,255,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.25);
+    position: relative;
+    z-index: 1;
+}
+
+.auth-banner .auth-icon .material-symbols-outlined {
+    font-size: 1.6rem;
+    color: var(--void);
+    font-variation-settings: 'FILL' 1;
+}
+
+.auth-banner h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    font-style: italic;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.4rem;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(135deg, var(--text-100) 0%, var(--text-200) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.auth-banner p {
+    font-size: 0.85rem;
+    color: var(--text-300);
+    position: relative;
+    z-index: 1;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+}
+
+/* ── Body ── */
+.auth-body {
+    padding: 2.25rem 2.5rem 2.5rem;
+    background: var(--surface);
+}
+
+.auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin-bottom: 0.65rem;
+}
+
+.auth-field label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-400);
+    padding-left: 1px;
+}
+
+.auth-field input { margin-bottom: 0; }
+
+/* Error msg */
+.msg {
+    font-size: 0.87rem;
+    text-align: center;
+    background: rgba(194,75,75,0.08);
+    color: #d98080;
+    padding: 0.75rem 1rem;
+    border-radius: var(--r-xs);
+    border: 1px solid rgba(194,75,75,0.18);
+    margin-bottom: 0.5rem;
     animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
 }
 
 @keyframes shake {
-    10%, 90% { transform: translate3d(-1px, 0, 0); }
-    20%, 80% { transform: translate3d(2px, 0, 0); }
-    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-    40%, 60% { transform: translate3d(4px, 0, 0); }
+    10%,90%       { transform: translate3d(-1px,0,0); }
+    20%,80%       { transform: translate3d(2px,0,0); }
+    30%,50%,70%   { transform: translate3d(-3px,0,0); }
+    40%,60%       { transform: translate3d(3px,0,0); }
 }
 
-/* Ensure inputs in the login form take full width */
-#login-form input[type="text"],
-#login-form input[type="email"],
-#login-form input[type="password"] {
+.auth-submit {
     width: 100%;
-    margin-bottom: 0;
+    padding: 14px 20px;
+    font-size: 0.82rem;
+    border-radius: var(--r-xs) !important;
+    margin-top: 0.85rem;
+    letter-spacing: 0.12em;
 }
 
-/* The form submit button */
-#login-form button {
-    width: 100%;
-    margin-top: 1rem;
-    font-size: 1.1rem;
-    padding: 14px 24px;
-}
-
-/* Container for each input to allow proper spacing */
-#login-form > div {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-/* Switch to register/login link */
 .auth-switch {
+    text-align: center;
     margin-top: 1.5rem;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+    font-size: 0.83rem;
+    color: var(--text-400);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-weight: 300;
 }
 
 .auth-switch a {
-    color: var(--accent-hover);
+    color: var(--gold);
+    font-weight: 500;
     text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
+    transition: color 0.2s;
 }
 
-.auth-switch a:hover {
-    color: var(--text-primary);
-    text-decoration: underline;
-}
+.auth-switch a:hover { color: var(--gold-light); }
+
+#login-form { width: 100%; display: contents; }

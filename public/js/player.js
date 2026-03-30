@@ -1,124 +1,166 @@
-var app = angular.module('MusicApp'); 
+var app = angular.module('MusicApp');
 
 app.controller('playerController', function($scope, $http, $timeout) {
-    const audio = document.getElementById('audio');
-    
-    $scope.isPlaying = false;
-    $scope.currentSongIndex = 0;
-    $scope.songs = [];
-    $scope.currentSong = {};
-    $scope.loading = true;
+    var audio = null;
 
-    // Fetch songs from API
+    $scope.isPlaying      = false;
+    $scope.currentSongIndex = 0;
+    $scope.songs          = [];
+    $scope.currentSong    = {};
+    $scope.loading        = true;
+    $scope.currentTime    = '0:00';
+    $scope.duration       = '--:--';
+    $scope.progressPercent  = '0%';
+    $scope.progressBuffered = '0%';
+
+    function getAudio() {
+        if (!audio) audio = document.getElementById('audio');
+        return audio;
+    }
+
+    function fmt(s) {
+        if (!isFinite(s) || isNaN(s)) return '--:--';
+        var m = Math.floor(s / 60);
+        var sec = Math.floor(s % 60);
+        return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    // Sync blurred art backdrop
+    function syncArtBlur(src) {
+        var blur = document.getElementById('artBlur');
+        if (blur && src) {
+            blur.style.backgroundImage = 'url(' + src + ')';
+        }
+    }
+
     $scope.loadLibrary = function() {
         $http.get('/api/songs')
             .then(function(response) {
-                let dbSongs = response.data;
-                $scope.songs = dbSongs.map((s, index) => {
+                $scope.songs = response.data.map(function(s) {
                     return {
                         id: s.id,
                         name: s.name,
-                        src: "/songs/" + s.fileName, // Serve from express static
-                        img: "imgs/default.png",
-                        artistName: s.uploadedBy || "Local"
+                        src: '/songs/' + s.fileName,
+                        img: 'imgs/default.png',
+                        artistName: s.uploadedBy || 'Local'
                     };
                 });
-
                 if ($scope.songs.length > 0) {
                     $scope.currentSong = $scope.songs[0];
                     $scope.extractImages();
+                    $timeout(function() { $scope.bindAudioEvents(); }, 120);
                 }
                 $scope.loading = false;
             })
-            .catch(function(error) {
-                console.error("Error fetching library", error);
+            .catch(function(err) {
+                console.error('Error fetching library', err);
                 $scope.loading = false;
             });
     };
 
-    // Extract ID3 tags for all songs
-    $scope.extractImages = function() {
-        $scope.songs.forEach((song, i) => {
-            const absoluteUrl = window.location.origin + song.src;
-            getImgSrc(absoluteUrl, function(imgUrl) {
-                $timeout(function() {
-                    $scope.songs[i].img = imgUrl;
-                    if (i === $scope.currentSongIndex) {
-                        $scope.currentSong.img = imgUrl;
-                    }
-                });
+    $scope.bindAudioEvents = function() {
+        var a = getAudio();
+        if (!a) return;
+
+        a.ontimeupdate = function() {
+            $scope.$apply(function() {
+                $scope.currentTime = fmt(a.currentTime);
+                if (a.duration) {
+                    $scope.progressPercent = ((a.currentTime / a.duration) * 100).toFixed(2) + '%';
+                }
             });
-        });
+        };
+
+        a.ondurationchange = function() {
+            $scope.$apply(function() { $scope.duration = fmt(a.duration); });
+        };
+
+        a.onprogress = function() {
+            if (a.buffered.length > 0 && a.duration) {
+                $scope.$apply(function() {
+                    $scope.progressBuffered = ((a.buffered.end(a.buffered.length - 1) / a.duration) * 100).toFixed(2) + '%';
+                });
+            }
+        };
+
+        a.onended = function() {
+            $scope.$apply(function() { $scope.next(); });
+        };
+
+        a.onplay = function() {
+            $scope.$apply(function() { $scope.isPlaying = true; });
+        };
+
+        a.onpause = function() {
+            $scope.$apply(function() { $scope.isPlaying = false; });
+        };
     };
 
-    // Play/Pause Logic
-    $scope.playPause = () => {
+    $scope.seek = function(event) {
+        var a = getAudio();
+        if (!a || !a.duration) return;
+        var rect = event.currentTarget.getBoundingClientRect();
+        a.currentTime = ((event.clientX - rect.left) / rect.width) * a.duration;
+    };
+
+    $scope.playPause = function() {
         if ($scope.songs.length === 0) return;
-
-        if ($scope.isPlaying) {
-            audio.pause();
-        } else {
-            audio.play();
-        }
-        $scope.isPlaying = !$scope.isPlaying;
+        var a = getAudio();
+        if (!a) return;
+        $scope.isPlaying ? a.pause() : a.play();
     };
 
-    // Next Track
-    $scope.next = () => {
+    $scope.next = function() {
         if ($scope.songs.length === 0) return;
         $scope.currentSongIndex = ($scope.currentSongIndex + 1) % $scope.songs.length;
         $scope.updateTrack();
     };
 
-    // Prev Track
-    $scope.prev = () => {
+    $scope.prev = function() {
         if ($scope.songs.length === 0) return;
         $scope.currentSongIndex = ($scope.currentSongIndex - 1 + $scope.songs.length) % $scope.songs.length;
         $scope.updateTrack();
     };
 
-    // Autoplay next on song end
-    if (audio) {
-        audio.onended = function() {
-            $scope.$apply(function() {
-                $scope.next();
-            });
-        };
-    }
+    $scope.updateTrack = function() {
+        $scope.currentSong      = $scope.songs[$scope.currentSongIndex];
+        $scope.progressPercent  = '0%';
+        $scope.progressBuffered = '0%';
+        $scope.currentTime      = '0:00';
+        $scope.duration         = '--:--';
+        syncArtBlur($scope.currentSong.img);
+        $timeout(function() {
+            var a = getAudio();
+            if (a) { a.load(); if ($scope.isPlaying) a.play(); }
+        }, 80);
+    };
 
-    $scope.updateTrack = () => {
-        $scope.currentSong = $scope.songs[$scope.currentSongIndex];
-        $timeout(() => {
-            if ($scope.isPlaying) audio.play();
+    $scope.extractImages = function() {
+        $scope.songs.forEach(function(song, i) {
+            getImgSrc(window.location.origin + song.src, function(imgUrl) {
+                $timeout(function() {
+                    $scope.songs[i].img = imgUrl;
+                    if (i === $scope.currentSongIndex) {
+                        $scope.currentSong.img = imgUrl;
+                        syncArtBlur(imgUrl);
+                    }
+                });
+            });
         });
     };
 });
 
-// Helper: ID3 Tags
 function getImgSrc(src, callback) {
-    if (typeof jsmediatags === 'undefined') {
-        callback("imgs/default.png");
-        return;
-    }
-    
+    if (typeof jsmediatags === 'undefined') { callback('imgs/default.png'); return; }
     jsmediatags.read(src, {
         onSuccess: function(tag) {
-            const picture = tag.tags.picture;
-            if (picture) {
-                let base64String = "";
-                const bytes = new Uint8Array(picture.data);
-                for (let i = 0; i < bytes.length; i++) {
-                    base64String += String.fromCharCode(bytes[i]);
-                }
-                const imgUrl = "data:" + picture.format + ";base64," + btoa(base64String);
-                callback(imgUrl);
-            } else {
-                callback("imgs/default.png");
-            }
+            var pic = tag.tags.picture;
+            if (pic) {
+                var b64 = '', bytes = new Uint8Array(pic.data);
+                for (var i = 0; i < bytes.length; i++) b64 += String.fromCharCode(bytes[i]);
+                callback('data:' + pic.format + ';base64,' + btoa(b64));
+            } else { callback('imgs/default.png'); }
         },
-        onError: function(error) {
-            // Usually happens if no ID3 tags exist
-            callback("imgs/default.png");
-        }
+        onError: function() { callback('imgs/default.png'); }
     });
 }
